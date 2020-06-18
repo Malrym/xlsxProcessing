@@ -4,8 +4,8 @@ print("Keep in mind, that your Table you want to move your Excel-File to has to 
 print("Right now, the Tool is only Capable of converting one sheet at once.")
 print("to make sure everything is working, please insert first your Username, Password, Host and Database you want to move your Excel-Table to.")
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-import pandas as pd                                                                                                             #Import des Pandas-Moduls
-import mysql.connector as mc                                                                                                    #Import des MySQL-Moduls
+import pandas as pd                                                                                                             #
+import mysql.connector as mc                                                                                                    #
 import tkinter as tk                                                                                                            #
 from tkinter import filedialog                                                                                                  #
 from pathlib import Path                                                                                                        #
@@ -13,33 +13,33 @@ from pathlib import Path                                                        
 root = tk.Tk()                                                                                                                  #
 root.withdraw()                                                                                                                 #
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Username = input("Log in as: ")                                                                                                 #Angabe des Usernames
-PW = input("Password: ")                                                                                                        #Angabe des Passwortes
-HostCon = input("Connect to Host: ")                                                                                            #Angabe des Hosts
-DB = input("Connect to Database: ")                                                                                             #Angabe der Datenbank
-connection=mc.connect(host=HostCon,                                                                                             #Verbindung zur DB mithilfe der Angaben
+Username = input("Log in as: ")                                                                                                 #
+PW = input("Password: ")                                                                                                        #
+HostCon = input("Connect to Host: ")                                                                                            #
+DB = input("Connect to Database: ")                                                                                             #
+connection=mc.connect(host=HostCon,                                                                                             #
                       database=DB,                                                                                              #                
                       user=Username,                                                                                            #                      
                       password=PW)                                                                                              #                
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-db_Info = connection.get_server_info                                                                                            #Einholen von Informationen über die Datenbank
-print('Informationen des Servers',db_Info)                                                                                      #Ausgabe der Informationen
-cursor = connection.cursor()                                                                                                    #Erlaubniserteilung an Python Datenbankeinträge in MySQL zu schreiben
+db_Info = connection.get_server_info                                                                                            #
+print('Informationen des Servers',db_Info)                                                                                      #
+cursor = connection.cursor()                                                                                                    #
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-print("Please locate your xlsx-file: ")                                                                                         #Angabe des xlsx-Dateipfads
-xlsxProc = filedialog.askopenfilename()
-df = pd.read_excel(xlsxProc)                                                                                                    #Einlesen in den DataFrame
+print("Please locate your xlsx-file: ")                                                                                         #
+xlsxProc = filedialog.askopenfilename()                                                                                         #
+df = pd.read_excel(xlsxProc)                                                                                                    #
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-PathSchema = input("Schema of your DB: ")                                                                                       #Angabe des DB-Schemas                                                 
-Columnlist = list(df.columns)                                                                                                   #Erstellen einer Liste mit den Spaltennamen der Tabelle 
+PathSchema = input("Schema of your DB: ")                                                                                       #                                                 
+Columnlist = list(df.columns)                                                                                                   #
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 StrColumns = ""                                                                                                                 #
 for i in Columnlist:                                                                                                            #
-    StrColumns = StrColumns + i + ","   
+    StrColumns = StrColumns + i + ","                                                                                           #
 StrColumns = StrColumns[0:len(StrColumns)-1]                                                                                    #
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-for i in range(len(df)):
-    Values = "("
+for i in range(len(df)):                                                                                                        #
+    Values = "("                                                                                                                #
     for x in Columnlist:                                                                                                        #
         Values = Values +"\""+ str(df[x][i]) +"\","                                                                             #
     cursor.execute('insert into '+PathSchema+"."+Path(xlsxProc).stem+"("+StrColumns+") Value "+Values[0:len(Values)-1]+");")    # 
