@@ -14,5 +14,10 @@ Hey everyone! Since this is my first multi-purpose Programm I want to document m
   Table with the same Name as the XLSX-Filename required.
   Changed all While-Loops used to For-Loops, since they're here WAY more effective.
   Added new Modules to make things easier.
+
+#0.1.2 Completed the Programm and fixed 2 Bugs:
+  Bad Table Error: Possibility to create a Table directly from the Programm
+  Bad DB Error: Possibility to create a new Schema/DB directly from the Programm 
+  Completed the Commentary
   
 Created with the Spyder IDE provived by Anaconda 3.
