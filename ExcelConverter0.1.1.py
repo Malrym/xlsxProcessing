@@ -68,37 +68,37 @@ except mc.Error as err:                                                         
         errBadTable = input("Do you want to create a new Table as "+Path(xlsxProc).stem+" within the "+PathSchema+"? (yes/no) ")# Und wieder Abgefragt. Diesmal allerdings, ob eine neue Tabelle mit den oben angegebenen Werten erstellt werden soll
           while errBadTable != "yes" and errBadTable != "no":                                                                   # und wieder eine Schleife erstellt:
             errBadTable = input("Input was not detected, please try again (yes/no): ")                                          # um erneut zur Eingabe aufgefordert, bis die Eingabe eine gewünschte ist
-        else:                                                                                                                   #
-            pass                                                                                                                #
-        if errBadTable = "yes":                                                                                                 #
-          print("Creating a new Table \""+Path(xlsxProc).stem+"\" within the "+PathSchema+" Schema")                            #
-          try:                                                                                                                  #
-            Columnstring = "("+Columnlist[0]+" varchar(99) primary key unique,"                                                 #
-            for Title in Columnlist:                                                                                            #
-              if Title = Columnlist[0]:                                                                                         #
-                pass                                                                                                            #
-              else:                                                                                                             #
-                Columnstring += Title+" varchar(99),"                                                                           #
-            Columnstring = Columnstring[0:len(Columnstring)-1]                                                                  #
-            Columnstring += ");"                                                                                                #
-            connection.commit()                                                                                                 #         
-            cursor.execute("create table "+PathSchema+"."+Path(xlsxProc).stem+Columnstring                                      #
-        if errBadTable == "no":                                                                                                 #
-            print("Try Adjusting your inputs and restart the Converter")                                                        #
-            Stop = input("Press enter to Exit the Converter")                                                                   #
-            if Stop == "" and Stop != "":                                                                                       #
-                sys.exit()                                                                                                      #
+        else:                                                                                                                   # wenn kein Fehler besteht
+            pass                                                                                                                # mache weiter.
+        if errBadTable = "yes":                                                                                                 # Wenn die eingabe "yes" gemacht wurde:
+          print("Creating a new Table \""+Path(xlsxProc).stem+"\" within the "+PathSchema+" Schema")                            # Zeige, dass probiert wird eine Neue Tabelle im Angegebenen Schema zu erstellen
+          try:                                                                                                                  # Versuche:
+            Columnstring = "("+Columnlist[0]+" varchar(99) primary key unique,"                                                 # Erstelle einen String mit einem Primärschlüssel, erster Wert der Spalten-Liste
+            for Title in Columnlist:                                                                                            # Erstelle eine Schleife für jedes Attribut in der Spalten-Liste
+              if Title = Columnlist[0]:                                                                                         # Beim ersten eintrag der Liste:
+                pass                                                                                                            # überspringe.
+              else:                                                                                                             # Ansonsten
+                Columnstring += Title+" varchar(99),"                                                                           # Ergänze den ZeilenString um einen neuen eintrag mit den Attributen "varchar(99)"
+            Columnstring = Columnstring[0:len(Columnstring)-1]                                                                  # Entferne das letzte Komma
+            Columnstring += ");"                                                                                                # und schliesse mit ");" den String ab, damit MySQL ihn weiterverwenden kann.
+            cursor.execute("create table "+PathSchema+"."+Path(xlsxProc).stem+Columnstring                                      # Schreiben des dazugehörigen MySQL-Befehls mithilfe der Variablen.
+            connection.commit()                                                                                                 # und bestätigen der Abfrage
+        if errBadTable == "no":                                                                                                 # Fall die Antwort "no" ist.
+            print("Try Adjusting your inputs and restart the Converter")                                                        # Gebe den Text aus und
+            Stop = input("Press enter to Exit the Converter")                                                                   # Erstelle eine Variable zum Beenden des Programms
+            if Stop == "" and Stop != "":                                                                                       # Egal was die eingabe ist, mindestens einmal enter
+                sys.exit()                                                                                                      # Beende das Programm
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-StrColumns = ","                                                                                                                #
-for i in Columnlist:                                                                                                            #
-    StrColumns = StrColumns + i + ","                                                                                           #
-StrColumns = StrColumns[1:len(StrColumns)-1]                                                                                    #
+StrColumns = ","                                                                                                                # Erstelle einen neuen String mit Spaltennamen
+for i in Columnlist:                                                                                                            # für jedes Element in der Spalten-Liste
+    StrColumns = StrColumns + i + ","                                                                                           # ergänze den String um das Element sowie um ein Komma
+StrColumns = StrColumns[1:len(StrColumns)-1]                                                                                    # Streiche das Letzte Komma, nachdem die Schleife durchlaufen wurde.
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-for i in range(len(df)):                                                                                                        #
-    Values = "("                                                                                                                #
-    for x in Columnlist:                                                                                                        #
-        Values = Values +"\""+ str(df[x][i]) +"\","                                                                             #
-    cursor.execute('insert into '+PathSchema+"."+Path(xlsxProc).stem+"("+StrColumns+") Value "+Values[0:len(Values)-1]+");")    # 
-connection.commit()                                                                                                             #
+for i in range(len(df)):                                                                                                        # Für jedes Element im Dataframe
+    Values = "("                                                                                                                # Erstelle zuerst eine Variable mit dem Namen "Values"
+    for x in Columnlist:                                                                                                        # für jedes Element in der Spalten-Liste
+        Values = Values +"\""+ str(df[x][i]) +"\","                                                                             # Ergänze den Values-String um den Eintrag an der jeweiligen Position im Dataframe
+    cursor.execute('insert into '+PathSchema+"."+Path(xlsxProc).stem+"("+StrColumns+") Value "+Values[0:len(Values)-1]+");")    # Schreibe eine Abfrage in MySQL mit den entsprechenden Angaben bestehend aus Schema/Datenbank, der Tabelle, den Spalten der Tabelle, sowie den aktuell gespeicherten Werten im Values-String
+connection.commit()                                                                                                             # Bestätige das Ausführen der Abfrage und somit das übernehmen der Werte der Excel-Tabelle in die MySQL-Datenbank.
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-print('Done')                                                                                                                   #
+print('Done')                                                                                                                   # Bestätigen des Abschliessen das Programms durch eine Textausgabe. Done.
